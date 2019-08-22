@@ -1,26 +1,14 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // const proxyurl = "https://bb-election-api.herokuapp.com/";
-    // const url = "https://example.com";
-
-    // const url = 'https://bb-election-api.herokuapp.com/';
-    // const url = 'http://bitmaker-monsters-api.herokuapp.com';
-
-
+    // const url = "https://bb-election-api.herokuapp.com/";  // This endpoint is not working.
+    const url = 'https://eric-deploy-test.herokuapp.com/bb';  // Eric's API endpoint.
+    const request = axios.get(url);
     const allCandidatesList = document.querySelector('#all_candidates');
 
-    const url = 'https://eric-deploy-test.herokuapp.com/bb';
-
-
-
-
-    // const request = axios.get(proxyurl + url);
-    const request = axios.get(url);
-
     request.then((response) => {
-        console.log('-- Received response.');
+        // console.log('-- Received response.');
 
         ourCandidates = response.data
-        console.log(ourCandidates);
+        // console.log(ourCandidates);
 
         // ourResponse = {
         //   "candidates": [
@@ -52,30 +40,26 @@ document.addEventListener("DOMContentLoaded", function() {
         //   ]
         // }
 
-
-        
-  
-        // const dataElem = document.createElement('span');
-        // // dataElem.innerHTML = response.data;
-        // dataElem.innerHTML = ourResponse
-        // document.querySelector('#returnedData').appendChild(dataElem)
-  
-        // // console.log(typeof(ourResponse));
-
         ourCandidates['candidates'].forEach((element) => {
-          console.log(element);
+            // console.log(element);
 
-          let dataElem = document.createElement('li');
-          dataElem.innerHTML = `${element.name} got ${element.votes} votes.`;
+            let dataElem = document.createElement('li');
+            dataElem.innerHTML = `${element.name} got ${element.votes} votes.`;
 
-          allCandidatesList.append(dataElem);
-
-
+            allCandidatesList.append(dataElem);
         });
+    })
+    .catch((error) => {
+        // console.log('-- Received error.');
+        // console.log(error);
 
-        // monsterDataElem.innerHTML = '';
-  
-        // monsterDataElem.appendChild(dataElem);
-      })
+        let dataElem = document.createElement('li');
+        dataElem.innerHTML = `${error}<br/>So sorry for the inconvenience!`;
 
+        allCandidatesList.appendChild(dataElem);
+    })
+    .then(() => {
+        // console.log('-- Request is over regardless if it worked or not.');
+        // console.log('Hey, the request finished!');
+    })
 });
