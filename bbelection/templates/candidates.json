@@ -1,0 +1,29 @@
+{
+    candidates: [
+    {
+    id: "57781489020aca11009a4c4d",
+    name: "Spongebob",
+    votes: 25087
+    },
+    {
+    id: "57781489020aca11009a4c4e",
+    name: "Patrick",
+    votes: 24714
+    },
+    {
+    id: "57781489020aca11009a4c4f",
+    name: "Squidward",
+    votes: 53656
+    },
+    {
+    id: "57781489020aca11009a4c50",
+    name: "Sandy",
+    votes: 5886
+    },
+    {
+    id: "57781489020aca11009a4c51",
+    name: "Gary",
+    votes: 34127
+    }
+    ]
+}
