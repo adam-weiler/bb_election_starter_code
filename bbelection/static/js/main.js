@@ -16,16 +16,32 @@ document.addEventListener("DOMContentLoaded", function() {
             let dataElem = document.createElement('li');
             dataElem.innerHTML = `${element.name} got ${element.votes} votes - ${element.id}.
             <form id="${element.id}" method="POST" action="https://bb-election-api.herokuapp.com/vote?id=">
-                <input type="hidden" name="id" value="${element.id}">    
-                <input type="submit" />
+                <input type="hidden" name="id" value="${element.id}">
+                <input type="submit" value="Vote!" />
             </form>`;
+
+            //<input type="hidden" name="votes" value="${element.votes}">
 
             allCandidatesList.append(dataElem);
 
-            dataElem.addEventListener('submit', e => {
+            dataElem.addEventListener('submit', e => {  // The user is clicking on Vote.
                 e.preventDefault();
-                
-                console.log('Voting', e.target);
+                let form = e.target
+                // console.log('Voting', e.target, form, form.id, form.id.value, form.votes.value);
+                // let candidate_id = form.querySelector('input[type=hidden]').value;
+
+                axios.post(form.action, {
+                    id: form.id.value,
+                    // id: form.querySelector('input[type=hidden]').value,
+                })
+                .then((response) => {
+                    console.log('-- Voting success.');
+                    console.log(response.status);
+                })
+                .catch((error) => {
+                    console.log('-- Voting error.');
+                    console.log(error);
+                })
             })
 
 
@@ -33,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     })
     .catch((error) => {
-        console.log('-- Received error.');
+        console.log('-- Loading error.');
         console.log(error);
 
         let dataElem = document.createElement('li');
