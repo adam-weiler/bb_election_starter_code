@@ -15,12 +15,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
             let dataElem = document.createElement('li');
             dataElem.innerHTML = `${element.name} got ${element.votes} votes - ${element.id}.
-            <form method="POST" action="https://bb-election-api.herokuapp.com/vote?id=">
+            <form id="${element.id}" method="POST" action="https://bb-election-api.herokuapp.com/vote?id=">
                 <input type="hidden" name="id" value="${element.id}">    
                 <input type="submit" />
             </form>`;
 
             allCandidatesList.append(dataElem);
+
+            dataElem.addEventListener('submit', e => {
+                e.preventDefault();
+                
+                console.log('Voting', e.target);
+            })
+
+
+            // handleFormSubmit();
         });
     })
     .catch((error) => {
@@ -35,5 +44,20 @@ document.addEventListener("DOMContentLoaded", function() {
     .then(() => {
         console.log('-- Request is over regardless if it worked or not.');
         console.log('Hey, the request finished!');
-    })
+    });
+
+
+    // function handleFormSubmit(id) {
+    //     console.log('handleFormSubmit')
+    //     // console.log(`${e} e`)
+
+    //     let form = document.getElementById(id);
+    //     console.log(form);
+
+    //     form.addEventListener('submit', e => {
+    //         e.preventDefault();
+    //         console.log('Voting');
+    //     })
+
+    // }
 });
