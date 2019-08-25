@@ -7,13 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
     request.then((response) => {
         console.log('-- Received response.');
 
-        // ourCandidates = response.data
-        
-
         redrawPage(response.data);
-
-
-
 
         const refreshPage = document.getElementById('refresh_page');
         // console.log(refreshPage);
@@ -24,27 +18,12 @@ document.addEventListener("DOMContentLoaded", function() {
             const request = axios.get(url);
             request.then((response) => {
                 console.log('-- Refreshing the page.');
-                
                 redrawPage(response.data);
-            }) ///I'm here...
-
-
-            // voteSpans = document.querySelectorAll('.votes');
-            // console.log(typeof(voteSpans))
-            // console.log(voteSpans)
-            // voteSpans.forEach((element) => {
-            //     console.log(element.innerHTML)
-            //     // element.innerHTML = 'Puppies!'
-            // })
-            
-            // console.log(voteSpans)
-        })
-        
-        
-
-
-        
-
+            })
+            .catch((error) => {
+                console.log('-- Refresh error.');
+            });
+        });
     })
     .catch((error) => {
         console.log('-- Loading error.');
@@ -60,63 +39,41 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log('Hey, the request finished!');
     });
 
+    function redrawPage(ourCandidates) {
+        // console.log(ourCandidates);
+        allCandidatesList.innerHTML = '';
 
-    // function handleFormSubmit(id) {
-    //     console.log('handleFormSubmit')
-    //     // console.log(`${e} e`)
+        ourCandidates['candidates'].forEach((element) => {
+            console.log(element);
 
-    //     let form = document.getElementById(id);
-    //     console.log(form);
+            let dataElem = document.createElement('li');
+            dataElem.innerHTML = `${element.name} got ${element.votes} votes - ${element.id}.
+            <form id="${element.id}" method="POST" action="https://bb-election-api.herokuapp.com/vote?id=">
+                <input type="hidden" name="id" value="${element.id}">
+                <input type="submit" value="Vote!" />
+            </form>`;
 
-    //     form.addEventListener('submit', e => {
-    //         e.preventDefault();
-    //         console.log('Voting');
-    //     })
+            allCandidatesList.append(dataElem);
 
-    // }
+            dataElem.addEventListener('submit', e => {  // The user is clicking on Vote.
+                e.preventDefault();
+                let form = e.target
+                // console.log('Voting', e.target, form, form.id, form.id.value, form.votes.value);
+                // let candidate_id = form.querySelector('input[type=hidden]').value;
 
-
-
-
-function redrawPage(ourCandidates) {
-    // console.log(ourCandidates);
-    allCandidatesList.innerHTML = '';
-
-    ourCandidates['candidates'].forEach((element) => {
-        console.log(element);
-
-        let dataElem = document.createElement('li');
-        dataElem.innerHTML = `${element.name} got <span class="votes">${element.votes}</span> votes - ${element.id}.
-        <form id="${element.id}" method="POST" action="https://bb-election-api.herokuapp.com/vote?id=">
-            <input type="hidden" name="id" value="${element.id}">
-            <input type="submit" value="Vote!" />
-        </form>`;
-
-        //<input type="hidden" name="votes" value="${element.votes}">
-
-        allCandidatesList.append(dataElem);
-
-        dataElem.addEventListener('submit', e => {  // The user is clicking on Vote.
-            e.preventDefault();
-            let form = e.target
-            // console.log('Voting', e.target, form, form.id, form.id.value, form.votes.value);
-            // let candidate_id = form.querySelector('input[type=hidden]').value;
-
-            axios.post(form.action, {
-                id: form.id.value,
-                // id: form.querySelector('input[type=hidden]').value,
+                axios.post(form.action, {
+                    id: form.id.value,
+                    // id: form.querySelector('input[type=hidden]').value,
+                })
+                .then((response) => {
+                    console.log('-- Voting success.');
+                    console.log(response.status);
+                })
+                .catch((error) => {
+                    console.log('-- Voting error.');
+                    console.log(error);
+                })
             })
-            .then((response) => {
-                console.log('-- Voting success.');
-                console.log(response.status);
-            })
-            .catch((error) => {
-                console.log('-- Voting error.');
-                console.log(error);
-            })
-        })
-    });
-}
-
-
+        });
+    };
 });
