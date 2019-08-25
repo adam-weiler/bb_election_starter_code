@@ -17,5 +17,5 @@ from django.urls import path
 from bbelection import views
 
 urlpatterns = [
-    path('', views.home),
+    path('', views.home, name='home'),
 ]
